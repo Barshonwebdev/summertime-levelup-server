@@ -105,7 +105,7 @@ async function run() {
     app.get('/users/instructors',async(req,res)=>{
       const query={
        role:"instructor"
-      }
+      } 
       const result=await userCollection.find(query).toArray();
       res.send(result);
     })
