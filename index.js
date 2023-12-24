@@ -100,6 +100,15 @@ async function run() {
       const result= await userCollection.updateOne(filter,updateDoc);
       res.send(result);
     })
+
+    //instructor list filter api
+    app.get('/users/instructors',async(req,res)=>{
+      const query={
+       role:"instructor"
+      }
+      const result=await userCollection.find(query).toArray();
+      res.send(result);
+    })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
