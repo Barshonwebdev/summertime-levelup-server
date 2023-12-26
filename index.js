@@ -30,7 +30,7 @@ async function run() {
 
     // collections 
     const userCollection = client.db('summertime-levelup').collection('users');
-
+    const classesCollection=client.db('summertime-levelup').collection('classes');
 
 
     //users api
@@ -107,6 +107,18 @@ async function run() {
        role:"instructor"
       } 
       const result=await userCollection.find(query).toArray();
+      res.send(result);
+    })
+
+    //create class api
+    app.post('/createclass',async(req,res)=>{
+      const classEntity=req.body;
+      const result=await classesCollection.insertOne(classEntity);
+    })
+
+    //see the classes api
+    app.get('/createclass',async(req,res)=>{
+      const result=await classesCollection.find().toArray();
       res.send(result);
     })
     // Send a ping to confirm a successful connection
