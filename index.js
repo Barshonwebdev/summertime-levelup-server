@@ -114,6 +114,7 @@ async function run() {
     app.post('/createclass',async(req,res)=>{
       const classEntity=req.body;
       const result=await classesCollection.insertOne(classEntity);
+      console.log(classEntity);
     })
 
     //see the classes api
