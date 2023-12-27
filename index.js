@@ -124,7 +124,7 @@ async function run() {
     })
 
     //approve class api
-    app.patch('/createclass/approved/:id',async(req,res)=>{
+    app.patch('/classses/approved/:id',async(req,res)=>{
       const id=req.params.id;
       const filter={_id:new ObjectId(id)};
       const updateDoc={
@@ -136,7 +136,7 @@ async function run() {
        res.send(result);
     })
     //deny class api
-    app.patch('/createclass/denied/:id',async(req,res)=>{
+    app.patch('/classes/denied/:id',async(req,res)=>{
       const id=req.params.id;
       const filter={_id:new ObjectId(id)};
       const updateDoc={
