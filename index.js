@@ -118,8 +118,33 @@ async function run() {
     })
 
     //see the classes api
-    app.get('/createclass',async(req,res)=>{
+    app.get('/classes',async(req,res)=>{
       const result=await classesCollection.find().toArray();
+      res.send(result);
+    })
+
+    //approve class api
+    app.patch('/createclass/approved/:id',async(req,res)=>{
+      const id=req.params.id;
+      const filter={_id:new ObjectId(id)};
+      const updateDoc={
+        $set:{
+          status:'Approved'
+        },
+      }
+       const result = await classesCollection.updateOne(filter, updateDoc);
+       res.send(result);
+    })
+    //deny class api
+    app.patch('/createclass/denied/:id',async(req,res)=>{
+      const id=req.params.id;
+      const filter={_id:new ObjectId(id)};
+      const updateDoc={
+        $set:{
+          status:'Denied'
+        },
+      }
+      const result=await classesCollection.updateOne(filter,updateDoc);
       res.send(result);
     })
     // Send a ping to confirm a successful connection
