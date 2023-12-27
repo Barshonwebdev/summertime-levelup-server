@@ -119,10 +119,28 @@ async function run() {
 
     //see the classes api
     app.get('/classes',async(req,res)=>{
-      const result=await classesCollection.find().toArray();
-      res.send(result);
+      const sort={className:1}
+      const homesort={seats:-1}
+      const query={
+        status:'Approved'
+      }
+      const allresult=await classesCollection.find(query).sort(sort).toArray();
+      const homepageResult=await classesCollection.find(query).sort(homesort).toArray();
+      res.send({
+        allresult,homepageResult
+      });
     })
 
+    //query allclass api
+    app.get("/classesquery", async (req, res) => {
+      
+      const allresult = await classesCollection
+        .find()
+        .sort()
+        .toArray();
+      
+      res.send(allresult);
+    });
     //approve class api
     app.patch('/classses/approved/:id',async(req,res)=>{
       const id=req.params.id;
@@ -146,6 +164,19 @@ async function run() {
       }
       const result=await classesCollection.updateOne(filter,updateDoc);
       res.send(result);
+    })
+
+    // stats api 
+    app.get('/stats',async(req,res)=>{
+      const users=await userCollection.estimatedDocumentCount();
+      const classes=await classesCollection.estimatedDocumentCount();
+     
+
+      const instructors=await userCollection.countDocuments({
+        "role": "instructor"
+      });
+
+      res.send({users, instructors,classes});
     })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
