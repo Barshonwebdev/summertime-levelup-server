@@ -134,7 +134,7 @@ async function run() {
     //query allclass api
     app.get("/classesquery", async (req, res) => {
       const statusSort={
-        status:-1
+        status:-1 
       }
       const allresult = await classesCollection
         .find()
