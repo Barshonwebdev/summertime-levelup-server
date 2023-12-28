@@ -164,6 +164,23 @@ async function run() {
       const result=await classesCollection.findOne(query);
       res.send(result);
     })
+
+    // update class patch api 
+    app.patch('/updateclassform/:id',async(req,res)=>{
+      const updatedInfo=req.body;
+      const id=req.params.id;
+      const filter={_id:new ObjectId(id)};
+      const updateDoc={
+        $set:{
+          className:updatedInfo.className,
+          classPhoto:updatedInfo.classPhoto,
+          seats:updatedInfo.seats,
+          price:updatedInfo.price,
+        },
+      }
+      const result=await classesCollection.updateOne(filter,updateDoc);
+      res.send(result);
+    })
     //approve class api
     app.patch('/classses/approved/:id',async(req,res)=>{
       const id=req.params.id;
