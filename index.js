@@ -143,6 +143,19 @@ async function run() {
       
       res.send(allresult);
     });
+
+    // instructorwise class api 
+    app.get('/myclasses', async(req,res)=>{
+      const email=req.query.email;
+      const query={
+        instructorEmail:email
+      }
+      if(!email){
+        res.send([]);
+      }
+      const result=await classesCollection.find(query).toArray();
+      res.send(result);
+    })
     //approve class api
     app.patch('/classses/approved/:id',async(req,res)=>{
       const id=req.params.id;
