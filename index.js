@@ -31,6 +31,7 @@ async function run() {
     // collections 
     const userCollection = client.db('summertime-levelup').collection('users');
     const classesCollection=client.db('summertime-levelup').collection('classes');
+    const selectedClassesCollection=client.db('summertime-levelup').collection('selected-classes');
 
 
     //users api
@@ -56,6 +57,26 @@ async function run() {
       const result=await userCollection.deleteOne(query);
       res.send(result);
     })
+
+    // selected classes api 
+    app.post('/selectedclasses',async(req,res)=>{
+      const selectedclass=req.body;
+      const result=await selectedClassesCollection.insertOne(selectedclass);
+      res.send(result);
+    })
+
+    app.get('/selectedclasses',async(req,res)=>{
+      const email=req.query.email;
+      if(!email){
+        res.send([]);
+      }
+      const query={email:email};
+      const result=await selectedClassesCollection.find(query).toArray();
+      res.send(result);
+    })
+
+    // admin api 
+
     //make admin api
     app.patch('/users/admin/:id',async(req,res)=>{
       const id=req.params.id;
@@ -143,6 +164,11 @@ async function run() {
       
       res.send(allresult);
     });
+
+
+
+
+    // instructor api 
 
     // instructorwise class api 
     app.get('/myclasses', async(req,res)=>{
