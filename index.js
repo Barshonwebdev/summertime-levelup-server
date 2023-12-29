@@ -173,7 +173,6 @@ async function run() {
       const updateDoc={
         $set:{
           className:updatedInfo.className,
-          classPhoto:updatedInfo.classPhoto,
           seats:updatedInfo.seats,
           price:updatedInfo.price,
         },
