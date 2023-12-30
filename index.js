@@ -59,6 +59,8 @@ async function run() {
     })
 
     // selected classes api 
+
+    // select class 
     app.post('/selectedclasses',async(req,res)=>{
       const selectedclass=req.body;
       const{classId,email}=selectedclass;
@@ -72,6 +74,13 @@ async function run() {
       res.send(result);
     })
 
+    // delete class 
+    app.delete('/selectedclassesDelete/:id',async(req,res)=>{
+      const id=req.params.id;
+      const query={_id:new ObjectId(id)};
+      const result=await selectedClassesCollection.deleteOne(query);
+      res.send(result);
+    })
     // get classes user wise api 
     app.get('/selectedclasses',async(req,res)=>{
       const email=req.query.email;
