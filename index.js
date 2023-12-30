@@ -61,10 +61,18 @@ async function run() {
     // selected classes api 
     app.post('/selectedclasses',async(req,res)=>{
       const selectedclass=req.body;
+      const{classId,email}=selectedclass;
+      const query={classId:classId,email:email};
+      let existing=await selectedClassesCollection.findOne(query);
+      if(existing){
+        return res.send(['existing']);
+      }
+      console.log(selectedclass);
       const result=await selectedClassesCollection.insertOne(selectedclass);
       res.send(result);
     })
 
+    // get classes user wise api 
     app.get('/selectedclasses',async(req,res)=>{
       const email=req.query.email;
       if(!email){
