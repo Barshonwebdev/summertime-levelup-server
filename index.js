@@ -344,7 +344,8 @@ async function run() {
       }
 
       const query={email:email};
-      const result=await paymentsCollection.find(query).toArray();
+      const sort={date:-1};
+      const result=await paymentsCollection.find(query).sort(sort).toArray();
       res.send(result);
     })
     // Send a ping to confirm a successful connection
