@@ -310,8 +310,10 @@ async function run() {
       const enrolledResult = await enrolledCollection.insertOne(enrolledDoc);
       const deleteQuery={_id:{$in:payment.selectedItemId.map(id=>new ObjectId(id))}};
       const deletedResult=await selectedClassesCollection.deleteMany(deleteQuery);
-      
-      res.send({insertedResult,deletedResult,enrolledResult});
+      const classSeatUpdateQuery={_id:{$in:payment.classId.map(id=>new ObjectId(id))}};
+      console.log(classSeatUpdateQuery);
+      const updatedClass=await classesCollection.updateMany(classSeatUpdateQuery,{$inc:{seats:-1, enrolled:+1}});
+      res.send({insertedResult,deletedResult,enrolledResult,updatedClass});
     })
 
     //enrolled api
@@ -333,6 +335,7 @@ async function run() {
 
       const enrolledQuery={_id:{$in:finalQuery.map(id=>new ObjectId(id))}};
       const enrolledResult=await classesCollection.find(enrolledQuery).toArray();
+
       res.send( enrolledResult ); 
     })
 
