@@ -298,8 +298,10 @@ async function run() {
     // payment api
     app.post('/payment',async(req,res)=>{
       const payment=req.body;
-      const result=await paymentsCollection.insertOne(payment);
-      res.send(result);
+      const insertedResult=await paymentsCollection.insertOne(payment);
+      const deleteQuery={_id:{$in:payment.selectedItemId.map(id=>new ObjectId(id))}};
+      const deletedResult=await selectedClassesCollection.deleteMany(deleteQuery);
+      res.send({insertedResult,deletedResult});
     })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
