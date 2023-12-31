@@ -304,6 +304,7 @@ async function run() {
         email:payment.email,
         classesId:payment.selectedItemId.map(item=>item),
         classesName:payment.itemsName.map(item=>item),
+        menuClassId:payment.classId.map(item=>item),
       }
       ;
       const enrolledResult = await enrolledCollection.insertOne(enrolledDoc);
@@ -315,15 +316,24 @@ async function run() {
 
     //enrolled api
     app.get('/enrolledClasses',async(req,res)=>{
-      const email=req.query.email;
-      if(!email){
-        res.send([])
+      const email = req.query.email;
+      if (!email) {
+        res.send([]);
       }
 
-      const query={email:email};
-      const enrolledIDResult=await enrolledCollection.find(query).toArray();
-      const classQuery={}
-      res.send(enrolledIDResult);
+      const query = { email: email };
+      const enrolledIDResult = await enrolledCollection.find(query).toArray();
+
+      const idQueries = enrolledIDResult.map(
+        (eachclass) => eachclass.menuClassId
+      );
+      const finalQuery = Array.prototype.concat.apply([], idQueries);
+      console.log(idQueries);
+      
+
+      const enrolledQuery={_id:{$in:finalQuery.map(id=>new ObjectId(id))}};
+      const enrolledResult=await classesCollection.find(enrolledQuery).toArray();
+      res.send( enrolledResult ); 
     })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
