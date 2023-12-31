@@ -335,6 +335,18 @@ async function run() {
       const enrolledResult=await classesCollection.find(enrolledQuery).toArray();
       res.send( enrolledResult ); 
     })
+
+    //payment history api
+    app.get('/paymenthistory',async(req,res)=>{
+      const email=req.query.email;
+      if(!email){
+        res.send([])
+      }
+
+      const query={email:email};
+      const result=await paymentsCollection.find(query).toArray();
+      res.send(result);
+    })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
