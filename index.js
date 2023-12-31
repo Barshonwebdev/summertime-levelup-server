@@ -39,6 +39,7 @@ async function run() {
       .db("summertime-levelup")
       .collection("selected-classes");
     const paymentsCollection=client.db('summertime-levelup').collection('payments');
+    const enrolledCollection=client.db("summertime-levelup").collection('enrolled-classes');
 
     //users api
     app.post("/users", async (req, res) => {
@@ -299,9 +300,30 @@ async function run() {
     app.post('/payment',async(req,res)=>{
       const payment=req.body;
       const insertedResult=await paymentsCollection.insertOne(payment);
+      const enrolledDoc = {
+        email:payment.email,
+        classesId:payment.selectedItemId.map(item=>item),
+        classesName:payment.itemsName.map(item=>item),
+      }
+      ;
+      const enrolledResult = await enrolledCollection.insertOne(enrolledDoc);
       const deleteQuery={_id:{$in:payment.selectedItemId.map(id=>new ObjectId(id))}};
       const deletedResult=await selectedClassesCollection.deleteMany(deleteQuery);
-      res.send({insertedResult,deletedResult});
+      
+      res.send({insertedResult,deletedResult,enrolledResult});
+    })
+
+    //enrolled api
+    app.get('/enrolledClasses',async(req,res)=>{
+      const email=req.query.email;
+      if(!email){
+        res.send([])
+      }
+
+      const query={email:email};
+      const enrolledIDResult=await enrolledCollection.find(query).toArray();
+      const classQuery={}
+      res.send(enrolledIDResult);
     })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
