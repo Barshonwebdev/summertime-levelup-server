@@ -37,7 +37,7 @@ async function run() {
       .db("summertime-levelup")
       .collection("selected-classes");
     const paymentsCollection=client.db('summertime-levelup').collection('payments');
-    const enrolledCollection=client.db("summertime-levelup").collection('enrolled-classes');
+    const enrolledCollection=client.db("summertime-levelup").collection('enrolled-classes'); 
 
     //users api
     app.post("/users", async (req, res) => {
